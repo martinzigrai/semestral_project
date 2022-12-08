@@ -5,7 +5,17 @@ import '../ecdsa/ec_keypair_p.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
-class ECDSA_sign_verify_192{
+import 'package:benchmark_harness/benchmark_harness.dart';
+
+abstract class Benchmark extends BenchmarkBase {
+  const Benchmark(String name) : super(name);
+}
+
+class ECDSA_sign_verify_192 extends Benchmark{
+  const ECDSA_sign_verify_192(this.name) : super('ECDSA 192 - $name');
+
+  final String name;
+
   ECSignature ECDSASign(ECPrivateKey privateKey, Uint8List dataToSign, SecureRandom secureRandom) {
     //final signer = ECDSASigner(SHA256Digest(),null);
 
@@ -41,14 +51,16 @@ class ECDSA_sign_verify_192{
     return secureRandom;
   }
 
-  void getECDSA_sign_verify(var text) {
+  @override
+  void run(){
+    var message = 'abcdefghijklmnop';
     EC_keypair_p kp = EC_keypair_p();
     final pair = kp.generateKeys(exampleSecureRandom(), 0);
 
-    final sign = ECDSASign(pair.privateKey, utf8.encode(text) as Uint8List, exampleSecureRandom());
-    print(sign);
+    final sign = ECDSASign(pair.privateKey, utf8.encode(message) as Uint8List, exampleSecureRandom());
+    //print(sign);
 
-    final verify = ECDSAVerify(pair.publicKey, utf8.encode(text) as Uint8List, sign);
-    print(verify);
+    final verify = ECDSAVerify(pair.publicKey, utf8.encode(message) as Uint8List, sign);
+    //print(verify);
   }
 }

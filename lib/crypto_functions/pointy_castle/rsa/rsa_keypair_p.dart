@@ -3,6 +3,8 @@ import 'dart:typed_data';
 import 'package:pointycastle/src/platform_check/platform_check.dart';
 import 'package:pointycastle/export.dart';
 
+import 'package:benchmark_harness/benchmark_harness.dart';
+
 class RSA_keypair_p{
   AsymmetricKeyPair<RSAPublicKey, RSAPrivateKey> generateRSAkeyPair(SecureRandom secureRandom, int bitLength) {
     // Create an RSA key generator and initialize it
@@ -48,7 +50,7 @@ class RSA_keypair_p{
     final public = pair.publicKey;
     final private = pair.privateKey;
 
-    print(public);
-    print(private);
+    //print(public);
+    //print(private);
   }
 }

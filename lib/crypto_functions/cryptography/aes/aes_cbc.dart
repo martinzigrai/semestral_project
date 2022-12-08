@@ -1,10 +1,20 @@
 import 'dart:convert';
 import 'package:cryptography/cryptography.dart';
 
-class Aes_cbc{
+import 'package:benchmark_harness/benchmark_harness.dart';
 
-  Future<void> getAEScbc(var text) async{
-    final message = utf8.encode(text);
+abstract class Benchmark extends AsyncBenchmarkBase {
+  const Benchmark(String name) : super(name);
+}
+
+class Aes_cbc extends Benchmark{
+  const Aes_cbc(this.name) : super('AES-cbc $name');
+
+  final name;
+
+  @override
+  Future<void> run() async{
+    final message = utf8.encode('abcdefghijklmnop');
 
     final algorithm = AesCbc.with128bits(macAlgorithm: Hmac.sha256(),);
     final secretKey = await algorithm.newSecretKey();
@@ -15,15 +25,15 @@ class Aes_cbc{
       message,
       secretKey: secretKey,
     );
-    print('Ciphertext: ${secretBox.cipherText}');
+    //print('Ciphertext: ${secretBox.cipherText}');
 
     // Decrypt
     final clearText = await algorithm.decrypt(
       secretBox,
       secretKey: secretKey,
     );
-    print('Cleartext: $clearText');
-    print(utf8.decode(clearText));
+    //print('Cleartext: $clearText');
+    //print(utf8.decode(clearText));
   }
 }
 

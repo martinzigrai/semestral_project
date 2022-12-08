@@ -5,7 +5,16 @@ import '../rsa/rsa_keypair_p.dart';
 import 'dart:convert';
 import 'dart:typed_data';
 
-class RSA_sign_verify_3072{
+import 'package:benchmark_harness/benchmark_harness.dart';
+
+abstract class Benchmark extends BenchmarkBase {
+  const Benchmark(String name) : super(name);
+}
+
+class RSA_sign_verify_3072 extends Benchmark{
+  const RSA_sign_verify_3072(this.name) : super('RSA 3072 - $name');
+
+  final String name;
   Uint8List rsaSign(RSAPrivateKey privateKey, Uint8List dataToSign) {
     //final signer = Signer('SHA-256/RSA'); // Get using registry
     final signer = RSASigner(SHA256Digest(), '0609608648016503040201');
@@ -41,15 +50,17 @@ class RSA_sign_verify_3072{
     return secureRandom;
   }
 
-  void getRSA_sign_verify(var text) {
+  @override
+  void run(){
+    var message = 'abcdefghijklmnop';
     RSA_keypair_p kp = RSA_keypair_p();
     final pair = kp.generateRSAkeyPair(exampleSecureRandom(),2);
 
-    final sign = rsaSign(pair.privateKey, utf8.encode(text) as Uint8List);
-    print(sign);
+    final sign = rsaSign(pair.privateKey, utf8.encode(message) as Uint8List);
+    //print(sign);
 
-    final verify = rsaVerify(pair.publicKey, utf8.encode(text) as Uint8List, sign);
-    print(verify);
+    final verify = rsaVerify(pair.publicKey, utf8.encode(message) as Uint8List, sign);
+    //print(verify);
     
   }
 }
